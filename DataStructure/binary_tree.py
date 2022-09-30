@@ -1,6 +1,6 @@
 class TreeNode:
     """
-    构建树的节点
+    树的节点
     """
     def __init__(self, data):
         self.data = data
@@ -10,7 +10,7 @@ class TreeNode:
 
 def create_binary_tree(input_list=[]):
     """
-    构建二叉树
+    构建二叉树的一个节点（递归以构建所有节点）
     首先构建当前节点，其次用列表的一半数据分别构建左右节点，构建左右节点和原问题相同，故用递归
     此函数中递归的终止条件是input_list为None或为空
     或data为None
