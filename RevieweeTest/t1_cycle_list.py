@@ -45,6 +45,10 @@ def cycle_length(head: Node):
 
 
 def entry_point(head: Node):
+    """
+    判断链表的入环节点:
+    相遇后，其中一人重从起点跑，同等速度后第二次相遇的入环节点即是
+    """
     p1 = head
     p2 = head
     while p2 is not None and p2.next is not None:
