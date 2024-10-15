@@ -32,21 +32,22 @@ def plot_all_stock_data(stock_data, time_type, predict_stock=None):
     print("Total Rows: {}".format(len(time_list)), end=',\t')
     print('Total Time: {}'.format(time_type))
     if len(time_list) > 40:
-        plt.plot(time_list, price_list, 'g', label='Actual Price')
+        plt.plot(time_list, price_list, 'g', label='Actual Price', linewidth=1.2)
         if predict_stock is not None:
-            plt.plot(time_list, predict_stock, 'r--', label='Predict Price')
+            plt.plot(time_list, predict_stock, 'r--', label='Predict Price', linewidth=1.3)
     else:
-        plt.plot(time_list, price_list, 'g-v', label='Actual Price')
+        plt.plot(time_list, price_list, 'g-v', label='Actual Price', linewidth=1.2)
         if predict_stock is not None:
-            plt.plot(time_list, predict_stock, 'r--v', label='Predict Price')
-    plt.legend(loc='lower right', frameon=False)
-    plt.title('Price of A Stock', fontsize=12)
-    plt.ylabel('Price', fontsize=10)
-    plt.xlabel('Time: {}'.format(time_type), fontsize=10)
+            plt.plot(time_list, predict_stock, 'r--v', label='Predict Price', linewidth=1.3)
+    plt.legend(loc='lower right', frameon=False, ncol=1, prop={'size': 7.5})
+    plt.title('Price of A Stock', fontsize=7)
+    plt.ylabel('Price', fontsize=7)
+    plt.xlabel('Time: {}'.format(time_type), fontsize=7)
     if len(price_list) > 30:
-        plt.xticks(time_list[::len(price_list) // 30], rotation=45, minor=False, fontsize=6)
+        plt.xticks(time_list[::len(price_list) // 30], rotation=45, fontsize=4)
     else:
-        plt.xticks(time_list[::1], rotation=45, fontsize=6)
+        plt.xticks(time_list[::1], rotation=45, fontsize=4)
+    plt.yticks(fontsize=6)
     plt.grid(axis='y')
     # 设置图片的右边框和上边框为不显示
     ax = plt.gca()  # gca:get current axis得到当前轴
@@ -74,7 +75,7 @@ def determine_get_url(last_time, last_second_time, time_type):
     return False
 
 
-def write_to_stock(time_type="All"):
+def auto_write_to_stock(time_type="All"):
     # determine whether to collect stock from URL according to db
     need_get_latest_stock = True
     stock_database: StockDataBase = StockDataBase(time_type)
@@ -104,6 +105,7 @@ def preprocess_data(transaction_data):
     """Delete data that is too large or too small"""
     s = pd.Series(transaction_data)
     low, up = 0.002, 0.97
+    # low, up = 0, 1
     val_percent = s.quantile([low, up])
     ind, train_x, train_y = 1, [], []
     for one_stock_data in s:
@@ -117,12 +119,12 @@ def preprocess_data(transaction_data):
 
 def main():
     # get all A stock transaction data from URL or DataBase
-    time_type = "TODAY"
-    write_to_stock(time_type)
+    time_type = "All"
+    auto_write_to_stock(time_type)
 
     if time_type != "All":
-        stock_data = StockDataBase(time_type).get_whole_table()
-        # stock_data = StockDataBase(time_type).get_rows_where(condition="stock_name in ('主板A')")
+        # stock_data = StockDataBase(time_type).get_whole_table()
+        stock_data = StockDataBase(time_type).get_rows_where(condition="stock_name in ('主板A')")
         print('\t', *StockDataBase(time_type).zh_column_names.split(','), sep='  ')
         column_names = StockDataBase(time_type).column_names.split(',')
         table = tabulate(stock_data, headers=column_names, tablefmt="simple", numalign="left", showindex="always")
