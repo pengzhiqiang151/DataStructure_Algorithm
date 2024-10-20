@@ -123,8 +123,9 @@ def main():
     auto_write_to_stock(time_type)
 
     if time_type != "All":
-        # stock_data = StockDataBase(time_type).get_whole_table()
-        stock_data = StockDataBase(time_type).get_rows_where(condition="stock_name in ('主板A')")
+        stock_data = StockDataBase(time_type).get_whole_table()
+        if time_type == "TODAY":
+            stock_data = StockDataBase(time_type).get_rows_where(condition="stock_name in ('主板A')")
         print('\t', *StockDataBase(time_type).zh_column_names.split(','), sep='  ')
         column_names = StockDataBase(time_type).column_names.split(',')
         table = tabulate(stock_data, headers=column_names, tablefmt="simple", numalign="left", showindex="always")
