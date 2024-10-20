@@ -1,4 +1,6 @@
+import argparse
 import datetime
+import time
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -117,7 +119,23 @@ def preprocess_data(transaction_data):
     return np.array(train_x), np.array(train_y)
 
 
-def main():
+def exec_timed_task():
+    """
+    auto collect data from url and save to database.
+    """
+    while True:
+        time_type_list = ['All', 'TODAY']
+        for time_type in time_type_list:
+            print("Execute timed task: {}".format(time_type))
+            auto_write_to_stock(time_type)
+        time.sleep(3600)
+
+
+def main(timed_task: bool):
+    if timed_task:
+        exec_timed_task()
+        return
+
     # get all A stock transaction data from URL or DataBase
     time_type = "All"
     auto_write_to_stock(time_type)
@@ -155,4 +173,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(prog="Stock Analysis")
+    parser.add_argument('-t', '--timed_task', default=False, type=bool,
+                        help="whether to execute timed task or not")
+    args = parser.parse_args()
+    main(args.timed_task)
