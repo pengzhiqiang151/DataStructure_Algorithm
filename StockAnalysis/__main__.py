@@ -55,6 +55,7 @@ def plot_all_stock_data(stock_data, time_type, predict_stock=None):
     ax = plt.gca()  # gca:get current axis得到当前轴
     ax.spines['right'].set_color('none')
     ax.spines['top'].set_color('none')
+    plt.savefig("stock_all.png")
     plt.show()
 
 
